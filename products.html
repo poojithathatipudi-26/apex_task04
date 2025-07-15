@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Filter | Poojitha</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .product-controls {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .product-card {
+      padding: 15px;
+      background: var(--card-bg);
+      border-radius: 10px;
+      box-shadow: 0 4px 10px var(--card-shadow);
+      transition: transform 0.2s ease;
+    }
+    .product-card:hover {
+      transform: scale(1.03);
+    }
+  </style>
+</head>
+<body>
+  <header class="animated-header">
+    <h1><span class="highlight">Product</span> Filter</h1>
+    <nav>
+      <a href="index.html">About</a>
+      <a href="project.html">Projects</a>
+      <a href="todo.html">To-Do</a>
+      <a href="products.html">Product List</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <div class="product-controls">
+    <select id="category" onchange="filterProducts()">
+      <option value="all">All</option>
+      <option value="fashion">Fashion</option>
+      <option value="electronics">Electronics</option>
+    </select>
+    <select id="sort" onchange="filterProducts()">
+      <option value="none">Sort By</option>
+      <option value="low">Price: Low to High</option>
+      <option value="high">Price: High to Low</option>
+    </select>
+  </div>
+
+  <div class="products-grid" id="product-list"></div>
+
+  <button class="dark-toggle" onclick="document.body.classList.toggle('dark-mode')">🌙 Toggle Dark Mode</button>
+
+  <script>
+    const products = [
+      { name: 'Shirt', category: 'fashion', price: 999 },
+      { name: 'Laptop', category: 'electronics', price: 49999 },
+      { name: 'Headphones', category: 'electronics', price: 1999 },
+      { name: 'Dress', category: 'fashion', price: 1499 },
+    ];
+
+    function filterProducts() {
+      const category = document.getElementById('category').value;
+      const sort = document.getElementById('sort').value;
+      let filtered = [...products];
+
+      if (category !== 'all') {
+        filtered = filtered.filter(p => p.category === category);
+      }
+
+      if (sort === 'low') {
+        filtered.sort((a, b) => a.price - b.price);
+      } else if (sort === 'high') {
+        filtered.sort((a, b) => b.price - a.price);
+      }
+
+      renderProducts(filtered);
+    }
+
+    function renderProducts(list) {
+      const container = document.getElementById('product-list');
+      container.innerHTML = '';
+      list.forEach(p => {
+        container.innerHTML += `
+          <div class="product-card">
+            <h3>${p.name}</h3>
+            <p>₹${p.price}</p>
+            <small>${p.category}</small>
+          </div>`;
+      });
+    }
+
+    window.onload = filterProducts;
+  </script>
+</body>
+</html>
